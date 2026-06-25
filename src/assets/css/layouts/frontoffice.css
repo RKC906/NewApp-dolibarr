@@ -1,0 +1,82 @@
+:root {
+  --front-bg: #ffffff;
+  --front-body-bg: #fafafa;
+  --front-foreground: #09090b;
+  --front-muted: #71717a;
+  --front-border: #e4e4e7;
+  --front-accent: #f4f4f5;
+  --front-primary: #18181b;
+  --front-radius: 8px;
+}
+
+body {
+  margin: 0;
+  background-color: var(--front-body-bg);
+  color: var(--front-foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Header */
+.front-layout-header {
+  sticky: top;
+  top: 0;
+  background-color: var(--front-bg);
+  border-bottom: 1px solid var(--front-border);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.front-logo {
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: -0.025em;
+  color: var(--front-primary);
+}
+
+.front-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.front-nav-link {
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--front-muted);
+  transition: color 0.2s ease;
+}
+
+.front-nav-link:hover, 
+.front-nav-link.active-link {
+  color: var(--front-foreground);
+}
+
+/* Bouton Espace Admin style shadcn (outline/secondary button) */
+.btn-admin-nav {
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--front-foreground);
+  border: 1px solid var(--front-border);
+  padding: 8px 16px;
+  border-radius: var(--front-radius);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-admin-nav:hover {
+  background-color: var(--front-accent);
+}
+
+/* Main Content Zone */
+.front-main-content {
+  padding: 40px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
