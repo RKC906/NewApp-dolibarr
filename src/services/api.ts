@@ -11,7 +11,9 @@ export const api = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  params: {
     'DOLAPIKEY': DOLIBARR_API_KEY
   }
 })
