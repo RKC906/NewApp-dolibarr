@@ -31,7 +31,7 @@ const openSections = ref({
   stocks: true
 })
 
-function toggleSection(section: 'general' | 'catalogue' | 'rh' | 'compta' | 'stocks') {
+function toggleSection(section: 'general' | 'import' | 'catalogue' | 'rh' | 'compta' | 'stocks') {
   openSections.value[section] = !openSections.value[section]
 }
 
@@ -66,6 +66,19 @@ function handleLogout() {
             </RouterLink>
             <RouterLink to="/back/reset" class="sidebar-menu-link" active-class="active-sublink">
               <Settings class="h-4 w-4" /> <span class="hide-on-collapse">Réinitialisation</span>
+            </RouterLink>
+          </div>
+        </div>
+
+                <div class="sidebar-group">
+          <button class="sidebar-group-label" @click="toggleSection('import')">
+            <span class="hide-on-collapse">Import</span>
+            <ChevronRight class="chevron-icon h-3 w-3" :class="{ 'rotated': openSections.catalogue }" />
+          </button>
+          <div class="sidebar-menu-items" v-show="openSections.catalogue">
+            <RouterLink to="/back/importcsv" class="sidebar-menu-link" active-class="active-sublink">
+              <Package class="h-4 w-4" />
+              <span class="hide-on-collapse">Import de fichier csv</span>
             </RouterLink>
           </div>
         </div>

@@ -51,6 +51,11 @@ const router = createRouter({
           path: 'reset',
           name: 'backreset',
           component: () => import('@/views/backoffice/resetdata/ResetView.vue')
+        },
+        {
+          path: 'importcsv',
+          name: 'backimportcsv',
+          component: () => import('@/views/backoffice/import/ImportView.vue')
         }
       ]
     }
