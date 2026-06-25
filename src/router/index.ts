@@ -46,8 +46,12 @@ const router = createRouter({
           path: 'dashboard',
           name: 'backdashboard',
           component: () => import('@/views/backoffice/dashboard/Dashboard.vue')
+        },
+        {
+          path: 'reset',
+          name: 'backreset',
+          component: () => import('@/views/backoffice/resetdata/ResetView.vue')
         }
-        // Vos prochains modules d'administration (congés, etc.) viendront s'ajouter ici très facilement !
       ]
     }
   ],
