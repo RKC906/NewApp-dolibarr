@@ -1,0 +1,227 @@
+:root {
+  --bg-main: #ffffff;
+  --bg-sub: #fafafa;
+  --bo-foreground: #09090b;
+  --bo-border: #e4e4e7;
+  --bo-muted: #71717a;
+  --bo-muted-light: #f4f4f5;
+  --bo-radius: 8px;
+  
+  /* Sidebar spécifiques */
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e4e4e7;
+  --sidebar-w-open: 260px;
+  --sidebar-w-collapsed: 64px;
+}
+
+.backoffice-provider {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-sub);
+  color: var(--bo-foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ----------------------------------
+   SIDEBAR ARCHITECTURE
+---------------------------------- */
+.bo-sidebar {
+  width: var(--sidebar-w-open);
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Gestion du mode replié */
+.bo-sidebar.collapsed {
+  width: var(--sidebar-w-collapsed);
+}
+
+.sidebar-header-zone {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--bo-border);
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.sidebar-content-zone {
+  flex: 1;
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+/* Groupes collapsibles */
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-group-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--bo-muted);
+  cursor: pointer;
+  border-radius: var(--bo-radius);
+  text-align: left;
+}
+
+.sidebar-group-label:hover {
+  background-color: var(--bo-muted-light);
+  color: var(--bo-foreground);
+}
+
+.chevron-icon {
+  transition: transform 0.2s ease;
+}
+
+.chevron-icon.rotated {
+  transform: rotate(90deg);
+}
+
+.sidebar-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 4px;
+}
+
+/* Liens enfants */
+.sidebar-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bo-foreground);
+  padding: 8px 12px;
+  border-radius: var(--bo-radius);
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.sidebar-menu-link:hover {
+  background-color: var(--bo-muted-light);
+}
+
+.sidebar-menu-link.active-sublink {
+  background-color: var(--bo-muted-light);
+  font-weight: 600;
+}
+
+/* Cache les textes en mode replié */
+.bo-sidebar.collapsed .hide-on-collapse,
+.bo-sidebar.collapsed .chevron-icon {
+  display: none;
+}
+
+.bo-sidebar.collapsed .sidebar-group-label {
+  justify-content: center;
+  padding: 8px 0;
+}
+
+/* Footer de la Sidebar */
+.sidebar-footer-zone {
+  padding: 12px 8px;
+  border-top: 1px solid var(--bo-border);
+}
+
+.btn-logout-bo {
+  width: 100%;
+  background: none;
+  border: 1px solid var(--bo-border);
+  padding: 8px;
+  border-radius: var(--bo-radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.btn-logout-bo:hover {
+  background-color: #fef2f2;
+  color: #ef4444;
+  border-color: #fca5a5;
+}
+
+/* ----------------------------------
+   MAIN CONTAINER & TOPBAR
+---------------------------------- */
+.bo-main-inset {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bo-topbar {
+  height: 64px;
+  background-color: var(--bg-main);
+  border-bottom: 1px solid var(--bo-border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  sticky: top;
+  top: 0;
+  z-index: 10;
+}
+
+.btn-trigger-sidebar {
+  background: none;
+  border: 1px solid var(--bo-border);
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bo-foreground);
+}
+
+.btn-trigger-sidebar:hover {
+  background-color: var(--bo-muted-light);
+}
+
+.bo-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+
+.bc-muted { color: var(--bo-muted); font-weight: 400; }
+.bc-separator { color: var(--bo-border); }
+.bc-current { color: var(--bo-foreground); font-weight: 500; }
+
+/* Contenu dynamique */
+.bo-page-content {
+  padding: 24px;
+  flex: 1;
+  box-sizing: border-box;
+}

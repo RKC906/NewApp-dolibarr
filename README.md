@@ -27,6 +27,9 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 
 ```sh
 npm install
+npm install vue-router
+npm install axios
+npm install lucide-vue-next
 ```
 
 ### Compile and Hot-Reload for Development
