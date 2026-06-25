@@ -64,6 +64,9 @@ function handleLogout() {
               <LayoutDashboard class="h-4 w-4" />
               <span class="hide-on-collapse">Tableau de bord</span>
             </RouterLink>
+            <RouterLink to="/back/reset" class="sidebar-menu-link" active-class="active-sublink">
+              <Settings class="h-4 w-4" /> <span class="hide-on-collapse">Réinitialisation</span>
+            </RouterLink>
           </div>
         </div>
 
