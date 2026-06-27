@@ -17,5 +17,20 @@ export const importService = {
     // Exemple d'envoi vers l'endpoint comptabilité / notes de frais / salaires
     const response = await api.post('/expensereports/salaries-bulk', { data: salariesData })
     return response.data
+  },
+
+  async importZipJustificatifs(zipFile: File): Promise<any> {
+    const formData = new FormData()
+    
+    // Ajout du fichier ZIP au formulaire de requêtes
+    // Note : Changez 'file' par la clé attendue par votre API backend (ex: 'zip_archive')
+    formData.append('file', zipFile) 
+
+    const response = await api.post('/expensereports/justificatifs-zip', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return response.data
   }
 }
