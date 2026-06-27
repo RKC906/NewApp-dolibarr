@@ -45,7 +45,7 @@ const router = createRouter({
         {
           path: 'dashboard',
           name: 'backdashboard',
-          component: () => import('@/views/backoffice/dashboard/Dashboard.vue')
+          component: () => import('@/views/backoffice/dashboard/DashboardView.vue')
         },
         {
           path: 'reset',
