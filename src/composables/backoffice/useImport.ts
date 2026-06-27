@@ -1,6 +1,9 @@
 import { ref, computed } from 'vue'
 import { importService } from '@/services/backoffice/importService'
 
+// Définition d'un type pour les cibles d'importation afin de sécuriser le code
+type ImportTarget = 'employees' | 'salaries' | 'zip'
+
 export function useImport() {
   // États pour le Fichier 1 (Employés)
   const employeesFileName = ref<string | null>(null)
@@ -12,14 +15,18 @@ export function useImport() {
   const salariesHeaders = ref<string[]>([])
   const salariesRows = ref<Array<Record<string, string>>>([])
 
+  // NOUVEAU : États pour le Fichier 3 (Archive ZIP)
+  const zipFileName = ref<string | null>(null)
+  const zipFile = ref<File | null>(null) // Stocke l'objet binaire File complet
+
   // États globaux de l'interface
   const isLoading = ref<boolean>(false)
   const successMessage = ref<string | null>(null)
   const errorMessage = ref<string | null>(null)
 
-  // Indique si au moins un fichier est prêt à être importé
+  // Modifié : Indique si au moins un fichier (CSV ou ZIP) est prêt à être importé
   const hasDataToImport = computed(() => {
-    return employeesRows.value.length > 0 || salariesRows.value.length > 0
+    return employeesRows.value.length > 0 || salariesRows.value.length > 0 || zipFile.value !== null
   })
 
   // Parseur CSV robuste
@@ -43,7 +50,7 @@ export function useImport() {
     return result
   }
 
-  // Analyse le texte brut et remplit le bon état cible
+  // Analyse le texte brut et remplit le bon état cible (Uniquement pour le CSV)
   function processContent(content: string, target: 'employees' | 'salaries') {
     const lines = content.split(/\r?\n/).filter(line => line.trim() !== '')
     if (lines.length === 0) return
@@ -74,8 +81,18 @@ export function useImport() {
     errorMessage.value = null
   }
 
-  // Handler générique de lecture de fichier (Contient la correction du bug TS)
-  function loadFile(file: File, target: 'employees' | 'salaries') {
+  // Modifié : Handler de lecture s'adaptant au format CSV (Texte) ou ZIP (Binaire)
+  function loadFile(file: File, target: ImportTarget) {
+    // Cas spécifique pour le ZIP : Pas besoin de FileReader (binaire), on stocke directement le fichier
+    if (target === 'zip') {
+      zipFileName.value = file.name
+      zipFile.value = file
+      successMessage.value = null
+      errorMessage.value = null
+      return
+    }
+
+    // Traitement classique pour les fichiers CSV
     if (target === 'employees') {
       employeesFileName.value = file.name
     } else {
@@ -85,9 +102,8 @@ export function useImport() {
     const reader = new FileReader()
     reader.onload = (e) => {
       const text = e.target?.result
-      // 🛠️ FIX TS(2345) : On vérifie explicitement que c'est une string avant de l'envoyer
       if (typeof text === 'string') {
-        processContent(text, target)
+        processContent(text, target as 'employees' | 'salaries')
       } else {
         errorMessage.value = "Le format de lecture du fichier est invalide."
       }
@@ -95,21 +111,24 @@ export function useImport() {
     reader.readAsText(file)
   }
 
-  // Actions de nettoyage individuelles
-  function removeFile(target: 'employees' | 'salaries') {
+  // Modifié : Actions de nettoyage prenant en compte le ZIP
+  function removeFile(target: ImportTarget) {
     if (target === 'employees') {
       employeesFileName.value = null
       employeesHeaders.value = []
       employeesRows.value = []
-    } else {
+    } else if (target === 'salaries') {
       salariesFileName.value = null
       salariesHeaders.value = []
       salariesRows.value = []
+    } else if (target === 'zip') {
+      zipFileName.value = null
+      zipFile.value = null
     }
     successMessage.value = null
   }
 
-  // Déclencheur unique pour envoyer tout ce qui est chargé
+  // Modifié : Déclencheur unique mis à jour pour orchestrer l'envoi des CSV et du ZIP
   async function submitGlobalImport() {
     if (!hasDataToImport.value) return
 
@@ -120,24 +139,32 @@ export function useImport() {
     try {
       let msgEmployees = ''
       let msgSalaries = ''
+      let msgZip = ''
 
-      // Si le fichier des employés est présent, on l'envoie
+      // 1. Si le fichier des employés est présent, on l'envoie
       if (employeesRows.value.length > 0) {
         await importService.importEmployees(employeesRows.value)
-        msgEmployees = `✅ ${employeesRows.value.length} employé(s) ajoutés.`
+        msgEmployees = `\n- ✅ ${employeesRows.value.length} employé(s) ajouté(s).`
         removeFile('employees')
       }
 
-      // Si le fichier des salaires est présent, on l'envoie également
+      // 2. Si le fichier des salaires est présent, on l'envoie
       if (salariesRows.value.length > 0) {
         await importService.importSalaries(salariesRows.value)
-        msgSalaries = `✅ ${salariesRows.value.length} note(s) de salaire traitée(s).`
+        msgSalaries = `\n- ✅ ${salariesRows.value.length} note(s) de salaire traitée(s).`
         removeFile('salaries')
       }
 
-      successMessage.value = `Importation terminée avec succès ! ${msgEmployees} ${msgSalaries}`
+      // 3. NOUVEAU : Si le fichier ZIP est présent, on l'envoie
+      if (zipFile.value) {
+        await importService.importZipJustificatifs(zipFile.value)
+        msgZip = `\n- ✅ Archive de justificatifs (${zipFileName.value}) intégrée.`
+        removeFile('zip')
+      }
+
+      successMessage.value = `Importation terminée avec succès ! ${msgEmployees} ${msgSalaries} ${msgZip}`
     } catch (error) {
-      errorMessage.value = "Une erreur s'est produite lors de l'envoi des données vers l'API Dolibarr."
+      errorMessage.value = "Une erreur s'est produite lors de l'envoi des données vers le serveur."
       console.error(error)
     } finally {
       isLoading.value = false
@@ -151,6 +178,8 @@ export function useImport() {
     salariesFileName,
     salariesHeaders,
     salariesRows,
+    zipFileName, // Exposé pour ImportView.vue
+    zipFile,     // Exposé au besoin
     isLoading,
     successMessage,
     errorMessage,
