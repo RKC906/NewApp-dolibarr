@@ -7,15 +7,20 @@ import BackOfficeLayout from '@/layouts/BackLayout.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // 🌐 ESPACE FRONTOFFICE (Public)
     {
       path: '/',
       component: FrontLayout,
       children: 
       [
         {
-          path: '',
-          redirect: '/products'
+          path: 'accueil',
+          redirect: '/accueil'
+          
+        },
+        {
+          path: '/listeemployee',
+          name: 'listeemployee',
+          component: () => import('@/views/frontoffice/employee/EmployeeListe.vue')
         }      
       ]
     },
