@@ -1,0 +1,185 @@
+.employees-container {
+  padding: 2rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  color: #64748b;
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+}
+
+/* Boutons globaux */
+.btn-primary, .btn-primary-action {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover, .btn-primary-action:hover { background-color: #4338ca; }
+.btn-secondary {
+  background-color: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-secondary:hover { background-color: #f1f5f9; }
+
+/* Bloc de recherche multi-critères */
+.filters-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.filters-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.75rem;
+}
+
+.filters-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #334155;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  align-items: flex-end;
+}
+
+.filters-grid .global-search {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .filters-grid .global-search { grid-column: span 1; }
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.filter-group input, .filter-group select {
+  padding: 0.625rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #1e293b;
+  background-color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-icon-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.input-icon-wrapper input {
+  padding-left: 2.25rem;
+}
+
+.filters-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+/* Tableau des salariés */
+.table-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.table-wrapper { overflow-x: auto; }
+.employees-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.925rem; }
+.employees-table th { background-color: #f8fafc; color: #64748b; font-weight: 600; padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+.employees-table td { padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #334155; vertical-align: middle; }
+.employees-table tbody tr:hover { background-color: #f8fafc; }
+
+.font-mono { font-family: monospace; font-size: 0.95rem; color: #64748b; }
+.user-name { font-weight: 600; color: #0f172a; }
+
+/* Badges de Statut */
+.badge {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge.actif { background-color: #dcfce7; color: #16a34a; }
+.badge.inactif { background-color: #fee2e2; color: #dc2626; }
+
+/* Cellule d'actions */
+.actions-cell { display: flex; gap: 0.5rem; justify-content: center; }
+.btn-icon {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s;
+}
+.btn-icon:hover { background-color: #f1f5f9; color: #1e293b; }
+.btn-icon.delete:hover { background-color: #fee2e2; color: #dc2626; }
+
+.text-center { text-align: center; }
+.empty-table { padding: 3rem !important; color: #94a3b8; font-style: italic; }
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
